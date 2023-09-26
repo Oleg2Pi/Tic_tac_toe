@@ -1,9 +1,17 @@
 import random
 
 
+def Hello_game():
+    print('=' * 40)
+    print()
+    print('*' * 5 + 'Добро пожаловать в игру крестики-нолики!' + '*' * 5)
+    print()
+    print('=' * 40)
+
+
 def game_field_init():
-    print('Инициализация завершена.\n')
-    return [['_' for _ in range(3)] for _ in range(3)]
+    print('Поле создано.')
+    return [[' ' for _ in range(3)] for _ in range(3)]
 
 
 def persons_init():
@@ -32,7 +40,7 @@ def first_move():
 
 
 def board_move_accept(board, x, y):
-    return board[y][x] == '_'
+    return board[y][x] == ' '
 
 
 def move_person(board, sign_person):
@@ -54,7 +62,7 @@ def available_place(board):
     lst = list()
     for i in range(3):
         for j in range(3):
-            if board[i][j] == '_':
+            if board[i][j] == ' ':
                 lst.append((i, j))
     return len(lst) > 0
 
@@ -79,43 +87,64 @@ def win(board, sign, person):
 
 
 def game_again():
+    print('-+' * 20)
     print('Играть снова? (Y - yes, N - no)\n')
     query = input().upper()
     return query.startswith('Y')
 
 
+def print_board(board):
+    print('=' * 20)
+    print(*[' ', 0, 1, 2], sep=' | ')
+    print('- + ' * 3 + '-')
+    j = 0
+    for step in board:
+        print(j, *step, sep=' | ', end='\n')
+        print('- + ' * 3 + '-')
+        j += 1
+    print('=' * 20)
+
+
 def main():
-    print('Добро пожаловать в игру крестики-нолики!\n')
+    Hello_game()
     person_1, person_2 = persons_init()
+    print('=' * 40)
     while True:
         board = game_field_init()
-        print(*board, sep='\n', end='\n')
+        print_board(board)
         sign_per_1, sign_per_2 = sign_init(person_1)
+        print('=' * 10)
 
         print(
-            f'Игрок {person_1} играет за {sign_per_1}, игрок {person_2} играет за {sign_per_2}.\n')
+            f'Игрок {person_1} играет за {sign_per_1}, игрок {person_2} играет за {sign_per_2}.')
+        print('=' * 10)
 
-        print('Определение кто будет ходит первым:\n')
+        print('Определение кто будет ходит первым:')
+        print('=' * 10)
         if first_move():
-            print(f'Первым ходит игрок {person_1}\n')
+            print(f'Первым ходит игрок {person_1}')
+            print('=' * 10)
             p = 1
         else:
-            print(f'Первым ходит игрок {person_2}\n')
+            print(f'Первым ходит игрок {person_2}')
+            print('=' * 10)
             p = 2
 
         while True:
             if p == 1:
+                print_board(board)
                 print(f'Ход игрока {person_1}')
                 move_person(board, sign_per_1)
                 p = 2
-                print(*board, sep='\n', end='\n')
+                print_board(board)
                 if win(board, sign_per_1, person_1):
                     break
             else:
+                print_board(board)
                 print(f'Ход игрока {person_2}')
                 move_person(board, sign_per_2)
                 p = 1
-                print(*board, sep='\n', end='\n')
+                print_board(board)
                 if win(board, sign_per_2, person_2):
                     break
 
